@@ -41,15 +41,47 @@
 </head>
 
 <body>
+	<script>
+		function redirect(){
+			VIVE_AVATAR_DOMAIN = "avatar.viverse.com";
+			VIVE_API_DOMAIN = "world-api.viverse.com";
+			signInUrl = `https://${window.location.hostname}/api/v3/oauth/login?hl=en_US&callback=${window.location.href}`;
+			if(window.location.hostname == "world.viverse.com"){
+				cmsRedirectUrl = `https://${VIVE_API_DOMAIN}/api/hubs-cms/v1/redirect-avatar?state=${window.location.href}`;
+				window.location = `https://${VIVE_AVATAR_DOMAIN}/avatar/select-your-avatar?redirect_url=${encodeURIComponent(cmsRedirectUrl)}&sign_in_redirect_url=${encodeURIComponent(signInUrl)}`;
+			}
+			else if(window.location.hostname == "world-dev.viverse.com"){
+				VIVE_AVATAR_DOMAIN = "vr-viverse-web.htcwowdev.com";
+				VIVE_API_DOMAIN = "world-api-dev.viverse.com";
+				cmsRedirectUrl = `https://${VIVE_API_DOMAIN}/api/hubs-cms/v1/redirect-avatar?state=${window.location.href}`;
+				window.location = `https://${VIVE_AVATAR_DOMAIN}/avatar/select-your-avatar?redirect_url=${encodeURIComponent(cmsRedirectUrl)}&sign_in_redirect_url=${encodeURIComponent(signInUrl)}`;
+			}
+		}
+
+		if(localStorage.___hubs_store == null){
+			redirect();
+		}
+		else{
+			hubsStore = JSON.parse(localStorage.___hubs_store);
+			if(hubsStore.profile == null){
+				redirect();
+			}
+			else{
+				if(hubsStore.profile.avatarId == null || hubsStore.profile.displayName == null)
+				redirect();
+			}
+		}
+	</script>
 	<div id="gameContainer">
 		<canvas id="unity-canvas" data-pixel-art=""></canvas>
 		<script src="Build/Build.loader.js"></script>
+		<script src="https://avatar.viverse.com/static-misc/avatar-js-sdk/1.1.1/Avatar-SDK.js"></script>
 		<script>
 			var canvas = document.querySelector("#unity-canvas");
 			var config = {
-				dataUrl: "Build/Build.data.unityweb",
-				frameworkUrl: "Build/Build.framework.js.unityweb",
-				codeUrl: "Build/Build.wasm.unityweb",
+				dataUrl: "Build/Build.data",
+				frameworkUrl: "Build/Build.framework.js",
+				codeUrl: "Build/Build.wasm",
 				streamingAssetsUrl: "StreamingAssets",
 				companyName: "DefaultCompany",
 				productName: "football",
