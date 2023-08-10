@@ -56,6 +56,12 @@
 				cmsRedirectUrl = `https://${VIVE_API_DOMAIN}/api/hubs-cms/v1/redirect-avatar?state=${window.location.href}`;
 				window.location = `https://${VIVE_AVATAR_DOMAIN}/avatar/select-your-avatar?redirect_url=${encodeURIComponent(cmsRedirectUrl)}&sign_in_redirect_url=${encodeURIComponent(signInUrl)}`;
 			}
+			else if (window.location.hostname == 'world-stage.viverse.com'){
+				VIVE_AVATAR_DOMAIN = 'avatar-stage.viverse.com';
+				VIVE_API_DOMAIN = "world-api-stage.viverse.com";
+				cmsRedirectUrl = `https://${VIVE_API_DOMAIN}/api/hubs-cms/v1/redirect-avatar?state=${window.location.href}`;
+				window.location = `https://${VIVE_AVATAR_DOMAIN}/avatar/select-your-avatar?redirect_url=${encodeURIComponent(cmsRedirectUrl)}&sign_in_redirect_url=${encodeURIComponent(signInUrl)}`;
+			}
 		}
 
 		if(localStorage.___hubs_store == null){

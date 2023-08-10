@@ -4242,6 +4242,22 @@ function __IsVRSupported() {
 }
 
 async function __LoadAvatar() {
+  const guestViveAvatarSdk = globalThis.newViveAvatarSdk({}, "https://avatar.viverse.com/static-misc/avatar-js-sdk/1.1.1/Avatar-SDK.js");
+  const avatar = await guestViveAvatarSdk.viaWorker({
+   action: "downloadAndDecrypt",
+   params: {
+    modelUrl: 'https://world-api.viverse.com/api/hubs-cms/v1/avatars/vive-sync/iIHR6XUzAR4OiqOa-ZUH4GS2L7F9d6gl_ggG19WJ8o8?type=avatar'
+   }
+  });
+  var blob = new Blob([ avatar.arrayBuffer ], {
+   type: "application/octet-stream"
+  });
+  var blobUrl = URL.createObjectURL(blob);
+  console.log("blobUrl:" + blobUrl);
+  unityInstance.SendMessage("FirstSetupControl", "AvatarBlobCallback", blobUrl);
+
+
+  /*
  if (localStorage.___hubs_store != null) {
   hubsStore = JSON.parse(localStorage.___hubs_store);
   if (hubsStore.profile != null) {
@@ -4262,6 +4278,7 @@ async function __LoadAvatar() {
    }
   }
  }
+ */
 }
 
 function __LocalStorage_Clear() {
